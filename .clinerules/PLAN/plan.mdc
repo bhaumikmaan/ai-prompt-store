@@ -1,0 +1,75 @@
+---
+description: Master prompt for architecting and planning tasks. Enforces a rigorous, multi-phase workflow from requirements gathering to detailed plan generation and documentation.
+globs:
+  - "**"
+alwaysApply: true
+---
+# PLAN/ARCHITECT MODE WORKFLOW
+
+## PHASE 1: CONTEXT GATHERING & REQUIREMENT ANALYSIS
+
+1.  **Review Internal Context:** Before starting, silently review and synthesize information from:
+    * **Documentation:** `docs/architecture.md`, `docs/product_requirement_docs.md`, `docs/technical.md`
+    * **Task State:** `tasks/active_context.md`, `tasks/tasks_plan.md`
+    * **Source Code:** Analyze the existing codebase in `src/` to understand the current implementation.
+
+2.  **Clarify Requirements (Interactive):** Do not write a plan until requirements are unambiguous.
+    * **Identify Gaps:** Pinpoint any underspecified requirements, ambiguities, or implicit assumptions.
+    * **Ask Probing Questions:** Formulate precise, numbered questions for the user to resolve these gaps.
+    * **Anticipate Needs:** Suggest potential edge cases, future use-cases, or alternative approaches the user may not have considered.
+    * **Confirm Understanding:** After receiving answers, briefly restate the finalized requirements to confirm alignment before proceeding.
+
+## PHASE 2: SOLUTION DESIGN & REFINEMENT
+
+1.  **Decomposition:** Break the problem down into a list of smaller, manageable sub-problems. Outline a high-level architectural plan connecting them.
+
+2.  **Brainstorm & Evaluate:**
+    * **Generate Options:** Propose 2-3 distinct, viable solutions.
+    * **Define Criteria:** Establish clear evaluation criteria (e.g., implementation complexity, performance, scalability, maintainability, testability).
+    * **Trade-off Analysis:** Present a concise comparison (e.g., a markdown table) of the options against the criteria, highlighting the key trade-offs.
+
+3.  **Select & Justify:**
+    * **Recommend:** State which solution is optimal and provide a rigorous justification based on the trade-off analysis.
+    * **Self-Critique:** Challenge your own recommendation. What are its weaknesses? How can they be mitigated? Could a hybrid approach be better?
+
+4.  **External Research (If Necessary):** If data is needed to assess technical feasibility or compare technologies, use the `perplexity-mcp/search` tool.
+    ```
+    <use_mcp_tool>
+    <server_name>perplexity-mcp</server_name>
+    <tool_name>search</tool_name>
+    <arguments>
+    {
+      "query": "your search query here"
+    }
+    </arguments>
+    </use_mcp_tool>
+    ```
+
+## PHASE 3: PLAN PRESENTATION & VALIDATION
+
+Present the final plan in a detailed, structured format.
+
+1.  **Executive Summary:**
+    * **Problem:** Briefly restate the user's goal.
+    * **Solution:** High-level summary of the chosen approach.
+
+2.  **Assumptions:** List all assumptions made during the design process.
+
+3.  **Detailed Implementation Plan:** Provide a step-by-step sequence of actions. For each step, be specific:
+    * **What:** The concrete task (e.g., "Create new component `X`", "Modify `Y` function in `src/utils/helpers.js`", "Define new API endpoint `/api/v2/users`").
+    * **Why:** The purpose of this step in the overall plan.
+    * **Details:** Include code snippets, data schemas, API contracts, or file structure changes where applicable.
+
+4.  **Plan Quality Checklist:** Explicitly address the following for the final plan:
+    * **Robustness:** Detail error handling, edge cases, and fallback mechanisms.
+    * **Extensibility:** Explain how the design supports future features.
+    * **Testability:** Outline a testing strategy (e.g., unit tests for X, integration tests for Y).
+    * **Accuracy:** Confirm component interfaces and data flows are consistent.
+
+5.  **Alternatives Considered:** Briefly explain the other solutions you evaluated and the primary reasons they were not chosen.
+
+## PHASE 4: DOCUMENTATION & STATE UPDATE
+
+After the plan is approved, update the project's knowledge base.
+1.  **Update Documentation:** Integrate the architectural decisions and technical details into `docs/architecture.md` and `docs/technical.md`.
+2.  **Update Task Files:** Record the new plan and context in `tasks/tasks_plan.md` and `tasks/active_context.md`.

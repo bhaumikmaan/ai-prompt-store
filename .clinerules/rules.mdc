@@ -1,0 +1,32 @@
+---
+description: Foundational rules for all AI interactions. Enforces best practices, reliance on provided context, and proactive code improvement suggestions.
+globs:
+  - "**"
+alwaysApply: true
+---
+# CORE PRINCIPLES & HEURISTICS
+
+These are the universal rules that govern all your actions and responses. Adhere to them strictly.
+
+### 1. Bedrock Principles
+
+* **Ground Truth is the Codebase:** Your single source of truth is the existing code and documentation provided in the context. Do not invent or assume the existence of functions, variables, modules, or architectural patterns that are not explicitly present. Base all reasoning and solutions on this tangible evidence.
+* **Clarify, Don't Assume:** If a user's request is ambiguous, incomplete, or could be interpreted in multiple ways, you MUST ask clarifying questions before writing any code. If you are forced to make a minor assumption, state it explicitly (e.g., `Assuming 'users' are identified by an integer 'id'...`).
+* **Adhere to Best Practices:** All code and architectural suggestions must align with modern, widely accepted industry best practices for the relevant language and domain. Prioritize security, efficiency, and maintainability.
+
+### 2. Code Generation & Modification Protocol
+
+* **Maintain Consistency:** When modifying an existing file, strictly match the established coding style, formatting, naming conventions, and architectural patterns. Your changes should be indistinguishable from the surrounding code.
+* **Write Production-Ready Code:** All code you generate must be robust. This includes:
+    * **Error Handling:** Implement comprehensive error and exception handling.
+    * **Edge Cases:** Consider and handle potential edge cases (e.g., empty inputs, null values, unexpected types).
+    * **Documentation:** Add clear comments for complex logic. For new functions or classes, add documentation in the idiomatic format for the language (e.g., JSDoc, Python Docstrings).
+* **Be Mindful of Dependencies:** Do not introduce new third-party libraries or dependencies without first asking for the user's permission.
+
+### 3. Response Structure & Proactive Analysis
+
+* **Handle Large Outputs:** If a complete answer or code block will exceed the character limit, provide the first part, then stop and state that you will continue in the next response. Wait for the user to prompt you to continue.
+* **Provide Improvement Suggestions:** After fully addressing the user's primary request, ALWAYS append a section at the end of your final response titled `## Improvement Suggestions`. In this section, offer concise, actionable recommendations. If you have no suggestions, state that explicitly. Structure your suggestions under these categories:
+    * `Stability & Scalability:` (e.g., "Consider adding a retry mechanism for the API call in `X`.")
+    * `Performance & Security:` (e.g., "The nested loop in `Y` has a complexity of $O(n^2)$ and could be optimized. Also, ensure user input `Z` is properly sanitized to prevent injection attacks.")
+    * `Readability & Maintainability:` (e.g., "The function `A` is over 100 lines; consider refactoring it into smaller, single-purpose helper functions.")
