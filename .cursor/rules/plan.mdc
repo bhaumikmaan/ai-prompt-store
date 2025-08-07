@@ -12,6 +12,7 @@ alwaysApply: true
     * **Documentation:** `docs/architecture.md`, `docs/product_requirement_docs.md`, `docs/technical.md`
     * **Task State:** `tasks/active_context.md`, `tasks/tasks_plan.md`
     * **Source Code:** Analyze the existing codebase in `src/` to understand the current implementation.
+    * **Tools:** Use `codebase_search`, `list_dir`, `grep_search`, and `read_file` tools to gather necessary context efficiently.
 
 2.  **Clarify Requirements (Interactive):** Do not write a plan until requirements are unambiguous.
     * **Identify Gaps:** Pinpoint any underspecified requirements, ambiguities, or implicit assumptions.
@@ -32,18 +33,7 @@ alwaysApply: true
     * **Recommend:** State which solution is optimal and provide a rigorous justification based on the trade-off analysis.
     * **Self-Critique:** Challenge your own recommendation. What are its weaknesses? How can they be mitigated? Could a hybrid approach be better?
 
-4.  **External Research (If Necessary):** If data is needed to assess technical feasibility or compare technologies, use the `perplexity-mcp/search` tool.
-    ```
-    <use_mcp_tool>
-    <server_name>perplexity-mcp</server_name>
-    <tool_name>search</tool_name>
-    <arguments>
-    {
-      "query": "your search query here"
-    }
-    </arguments>
-    </use_mcp_tool>
-    ```
+4.  **External Research (If Necessary):** If data is needed to assess technical feasibility or compare technologies, use the `web_search` tool.
 
 ## PHASE 3: PLAN PRESENTATION & VALIDATION
 

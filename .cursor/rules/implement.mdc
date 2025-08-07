@@ -41,6 +41,7 @@ a. Get required code context from `src` and other codes at other places.
 - Track the flow of data and logic throughout all components involved to understand its full scope.
 </FLOW ANALYSIS>
 - Document these dependencies thoroughly, including the specific usage of functions or logic in files specified by @memory.mdc
+- Use appropriate tools (`codebase_search`, `grep_search`, `read_file`, `list_dir`) to gather complete context about the code being modified.
 </ANALYZE CODE>
 
 [Step: 2]
@@ -76,7 +77,13 @@ a. Get required code context from `src` and other codes at other places.
 <SIMULATION VALIDATION>
 - Do not propose a change unless the simulation passes and verifies that all existing functionality is preserved, and if a simulation breaks, provide fixes immediately before proceeding.
 </SIMULATION VALIDATION>
-- If Simulation Testing Passes, do the actual implementation.
+- If Simulation Testing Passes, do the actual implementation using the `edit_file` tool.
+
+4. When implementing changes:
+- Use the `edit_file` tool to make precise, targeted changes
+- Include sufficient context around modified code using `// ... existing code ...` comments
+- Verify changes with the `run_terminal_cmd` tool when necessary
+- If an edit doesn't apply correctly, use the `reapply` tool
 </MAKE CHANGES>
 
 [Step: 4] Perform <TESTING>.
@@ -92,7 +99,7 @@ a. Get required code context from `src` and other codes at other places.
 
 <REFERENCE>
 - Reference relevant documentation and best practices
-- Use <WEB USE> if needed to refer to documentation or best practices
+- Use `web_search` tool when needed to refer to documentation or best practices
 </REFERENCE>
 
 # TESTING (Always write TEST after IMPLEMENTATION) [ACT/Code MODE]
@@ -117,6 +124,7 @@ After you propose a change, run the tests yourself, and verify that it passes. D
 
 2. Write test code for ANY added critical functionality ALWAYS. For initial test generation use <DEPENDENCY BASED TESTING> and <NO BREAKAGE ASSERTION>. Then use <TEST PLAN> to write code for extensive testing.
 3. Document testing as specified in @memory.mdc
+4. Use `run_terminal_cmd` tool to execute tests and verify results
 </TESTING>
 
 - When implementing something new, be relentless and implement everything to the letter. Stop only when you're done till successfully testing, not before.

@@ -1,0 +1,145 @@
+---
+description: Comprehensive reference for all available tools and their usage guidelines across the project lifecycle.
+globs:
+  - "**"
+alwaysApply: true
+---
+# AVAILABLE TOOLS
+
+The following tools are available to assist with various tasks throughout the project lifecycle. Use them systematically and efficiently to navigate, modify, and improve the codebase.
+
+## 1. CODEBASE EXPLORATION & ANALYSIS
+
+### 1.1. **codebase_search**
+Find snippets of code from the codebase most relevant to the search query.
+- **Best For**: Semantic search for concepts or patterns
+- **Usage Guidelines**:
+  - This is a semantic search tool, so the query should ask for something semantically matching what is needed
+  - If it makes sense to only search in particular directories, specify them in the target_directories field
+  - Unless there is a clear reason to use your own search query, reuse the user's exact query with their wording
+  - Their exact wording/phrasing can often be helpful for the semantic search query
+  - Keeping the same exact question format can also be helpful
+
+### 1.2. **list_dir**
+List the contents of a directory.
+- **Best For**: Initial discovery and understanding file structure
+- **Usage Guidelines**: 
+  - Use for quick discovery before using more targeted tools
+  - Helps understand the file structure before diving deeper
+  - Can be used to explore the codebase systematically
+
+### 1.3. **file_search**
+Fast file search based on fuzzy matching against file path.
+- **Best For**: Finding files when you know part of the path
+- **Usage Guidelines**:
+  - Use when you know part of the file path but don't know the exact location
+  - Response will be capped to 10 results
+  - Make your query more specific if need to filter results further
+
+### 1.4. **grep_search**
+Fast text-based regex search for exact pattern matches within files or directories.
+- **Best For**: Finding exact text matches or regex patterns
+- **Usage Guidelines**:
+  - More precise than semantic search for finding specific strings or patterns
+  - Preferred when we know the exact symbol/function name/etc. to search in directories/file types
+  - The query MUST be a valid regex, so special characters must be escaped
+  - Example: To search for a method call 'foo.bar(', use the query '\bfoo\.bar\('
+  - Results are capped at 50 matches
+  - Use include or exclude patterns to filter the search scope by file type or specific paths
+
+## 2. FILE OPERATIONS
+
+### 2.1. **read_file**
+Read the contents of a file.
+- **Best For**: Examining specific file contents
+- **Usage Guidelines**:
+  - Output will include file contents from start_line_one_indexed to end_line_one_indexed_inclusive
+  - Provides a summary of lines outside the specified range
+  - Maximum 250 lines at a time, minimum 200 lines
+  - **Responsibility to ensure COMPLETE context**:
+    1) Assess if contents viewed are sufficient to proceed
+    2) Note where there are lines not shown
+    3) If contents viewed are insufficient, proactively call the tool again
+    4) When in doubt, gather more information
+  - Reading entire files:
+    - Use sparingly, especially for large files
+    - Only allowed if the file has been edited or manually attached by the user
+
+### 2.2. **edit_file**
+Propose an edit to an existing file or create a new file.
+- **Best For**: Making changes to the codebase
+- **Usage Guidelines**:
+  - Make clear what the edit is while minimizing unchanged code
+  - Use the special comment `// ... existing code ...` to represent unchanged regions
+  - Each edit should contain sufficient context of unchanged lines
+  - For new files, specify the complete content
+  - Must specify target_file before other arguments
+  - Format example:
+    ```
+    // ... existing code ...
+    FIRST_EDIT
+    // ... existing code ...
+    SECOND_EDIT
+    // ... existing code ...
+    ```
+
+### 2.3. **delete_file**
+Deletes a file at the specified path.
+- **Best For**: Removing unnecessary files
+- **Usage Guidelines**:
+  - Operation fails gracefully if:
+    - File doesn't exist
+    - Operation is rejected for security reasons
+    - File cannot be deleted
+
+### 2.4. **reapply**
+Calls a smarter model to apply the last edit to the specified file.
+- **Best For**: Correcting failed edits
+- **Usage Guidelines**:
+  - Use immediately after an edit_file tool call ONLY IF the diff is not as expected
+  - Indicates the model applying the changes was not smart enough to follow instructions
+
+## 3. EXECUTION & RESEARCH
+
+### 3.1. **run_terminal_cmd**
+PROPOSE a command to run on behalf of the user.
+- **Best For**: Executing terminal commands
+- **Usage Guidelines**:
+  - User must approve command before execution
+  - User may reject or modify the command
+  - Do NOT assume command has started running until user approval
+  - **Shell Context Rules**:
+    1) If in a new shell, `cd` to appropriate directory and do necessary setup
+    2) If in the same shell, check chat history for current working directory
+    3) For commands with pagers/requiring interaction, append ` | cat` (for git, less, head, tail, more, etc.)
+    4) For long-running commands, set `is_background` to true
+    5) Don't include any newlines in the command
+
+### 3.2. **web_search**
+Search the web for real-time information about any topic.
+- **Best For**: Gathering up-to-date external information
+- **Usage Guidelines**:
+  - Use for information not available in training data
+  - Use to verify current facts
+  - Results include relevant snippets and URLs
+  - Particularly useful for:
+    - Current events
+    - Technology updates
+    - Topics requiring recent information
+
+## TOOL SELECTION GUIDELINES
+
+When approaching a task, select the most appropriate tool based on these principles:
+
+1. **Start Broad, Then Narrow**: Begin with `list_dir` to understand structure, then use more targeted tools
+2. **Precision Matching**: Use `grep_search` for known strings, `codebase_search` for concepts
+3. **Minimal Reading**: Only read the files and portions necessary to complete the task
+4. **Careful Editing**: Always include sufficient context in edits to avoid ambiguity
+5. **Verify Before Execution**: Always get user confirmation before running commands
+6. **External Knowledge**: Use `web_search` only when internal documentation is insufficient
+
+When multiple tools could work, choose based on:
+- Speed (grep > file_search > codebase_search)
+- Precision (exact matches > fuzzy matches > semantic matches)
+- Scope (specific files > directories > entire codebase)
+
