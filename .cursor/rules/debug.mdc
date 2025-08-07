@@ -1,0 +1,48 @@
+---
+description: Master prompt for debugging tasks. Enforces a rigorous, iterative workflow for diagnosing issues, forming hypotheses, implementing fixes, and validating results.
+globs:
+  - "**"
+alwaysApply: true
+---
+# DEBUGGING WORKFLOW: ACT MODE
+
+When a test fails or unexpected behavior occurs, initiate this systematic debugging workflow. Do not skip steps.
+
+## PHASE 1: DIAGNOSE & UNDERSTAND
+
+1.  **Gather Evidence (`<DIAGNOSE>`):** Collect all available information without making changes.
+    * **Error Logs:** Capture the complete error message and stack trace.
+    * **Observed Behavior:** Describe exactly what happened versus what was expected.
+    * **Relevant Code:** Fetch the code for the failing function/component and any related modules.
+    * **Project Context:** Review `docs/architecture.md` and `tasks/active_context.md` to understand the intended design and current task.
+
+2.  **Formulate Hypothesis:**
+    * **Observation:** Based on the evidence from `<DIAGNOSE>`, state your primary observation in one sentence.
+    * **Reasoning & Hypothesis:** "Based on [Observation], my hypothesis is that [Cause]. This is the most likely cause because [Reasoning]."
+    * **Alternative Causes:** Briefly list 1-2 other possible causes. This sharpens the primary hypothesis.
+
+3.  **Verify Hypothesis:**
+    * **Verification Strategy:** Propose a minimal, non-invasive way to confirm your hypothesis. (e.g., "I will add a log statement to check the value of `X` before the crash," or "I will inspect the network request to see if parameter `Y` is missing.")
+    * **Execute & Observe:** Run the verification step and report the outcome.
+    * **Conclusion:**
+        * If the hypothesis is **confirmed**, proceed to PHASE 2.
+        * If the hypothesis is **rejected**, return to Step 2 (Formulate Hypothesis) with the new information.
+
+## PHASE 2: FIX & VALIDATE
+
+1.  **Propose the Fix:**
+    * **`REASONING PRESENTATION`:**
+        * **Goal:** State the intended outcome of the fix.
+        * **Changes:** Detail the precise code modifications (what lines to change, add, or remove in which files). Provide the exact code to be implemented.
+        * **Justification:** Explain why this specific change will resolve the issue and is superior to other alternatives.
+
+2.  **Implement the Fix (`SYSTEMATIC CODE PROTOCOL`):**
+    * Apply the code changes exactly as described in the `REASONING PRESENTATION`.
+    * Ensure the changes are clean, idiomatic, and follow existing code style.
+
+3.  **Test the Fix (`TESTING`):**
+    * **Primary Test:** Re-run the test that originally failed. It must now pass.
+    * **Regression Test:** Run related tests to ensure the fix has not introduced new bugs in other parts of the system.
+    * **Outcome:**
+        * If all tests **pass**, the debug session is complete. Document the fix if necessary.
+        * If any test **fails**, revert the changes and return to PHASE 1 with the new failure information. Do not attempt to patch a failed fix; start the diagnostic process over.
